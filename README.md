@@ -46,5 +46,6 @@ This is a learning project for me to understand how to build a modern infrastruc
 ## Reading Materials
 - [How Vercel builds Vercel](https://www.youtube.com/watch?v=-huwRrj_HA4)
 - [I built vercel in 4 Hours](https://youtu.be/c8_tafixiAs?si=9EjAPJsbh-TDqlLH)
+- [Behind the scenes of Vercel](https://vercel.com/blog/behind-the-scenes-of-vercels-infrastructure)
 
 Learn with me!
