@@ -13,6 +13,9 @@ RUN npm run build
 # Production stage
 FROM node:18-alpine
 
+# Install Git and dependencies
+RUN apk add --no-cache git openssh-client
+
 WORKDIR /app
 COPY package*.json ./
 RUN npm install --production

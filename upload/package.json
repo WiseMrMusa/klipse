@@ -22,6 +22,7 @@
   },
   "devDependencies": {
     "@types/cors": "2.8.15",
+    "@types/express": "5.0.1",
     "@types/fs-extra": "11.0.4",
     "@types/node": "22.9.0",
     "@types/uuid": "10.0.0",

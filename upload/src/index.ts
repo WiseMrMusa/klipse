@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import { v4 as uuidv4 } from 'uuid';
 import simpleGit from 'simple-git';
+import fs from 'fs-extra';
 import { getAllFiles } from './utils/fileUtils';
 import { uploadToNAS } from './utils/nasManager';
 import { publisher, getStatus } from './utils/redisClient';
@@ -10,7 +11,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const NAS_PATH = process.env.NAS_PATH || '/mnt/nas'; // Change to your NAS mount path
+const NAS_PATH = process.env.NAS_PATH || '/mnt/mycloud/klipse'; // Change to your NAS mount path
 
 // Endpoint to handle repo processing
 app.post('/process', async (req, res) => {
@@ -27,12 +28,16 @@ app.post('/process', async (req, res) => {
       uploadToNAS(file, NAS_PATH)
     ));
 
+    // Clean up
+    await fs.remove(`./out/${uploadId}`);
+
     // Update Redis
     await publisher.publish('upload-queue', uploadId);
     await publisher.set(`status:${uploadId}`, 'uploaded');
     
     res.json({ uploadId });
   } catch (error) {
+    console.log(error)
     res.status(500).json({ error: 'Processing failed' });
   }
 });
@@ -43,6 +48,6 @@ app.get('/status/:id', async (req, res) => {
   res.json({ status });
 });
 
-app.listen(3000, () => {
-  console.log('Server running on port 3000');
+app.listen(3005, () => {
+  console.log('Server running on port 3005');
 });

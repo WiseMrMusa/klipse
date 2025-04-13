@@ -12,14 +12,14 @@ services:
       - upload-network
 
   upload:
-    build: .
+    build: ./upload
     ports:
-      - "3000:3000"
+      - "3005:3005"
     environment:
       - REDIS_URL=redis://redis:6379
-      - NAS_PATH=/mnt/nas
+      - NAS_PATH=/mnt/mycloud/klipse
     volumes:
-      - nas_volume:/mnt/nas
+      - nas_volume:/mnt/mycloud/klipse
       - ./out:/app/out
     depends_on:
       - redis
