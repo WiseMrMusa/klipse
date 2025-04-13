@@ -26,6 +26,21 @@ services:
     networks:
       - upload-network
 
+  deploy:
+    build: ./deploy
+    ports:
+      - "3006:3006"
+    environment:
+      - REDIS_URL=redis://redis:6379
+    volumes:
+      - ./:/app
+      - /mnt/mycloud/klipse/:/nas/input
+      - /mnt/mycloud/klipse/deploy/:/nas/deployments
+    depends_on:
+      - redis
+    networks:
+      - upload-network
+
 volumes:
   redis_data:
 
