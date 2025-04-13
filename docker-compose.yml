@@ -19,7 +19,7 @@ services:
       - REDIS_URL=redis://redis:6379
       - NAS_PATH=/mnt/mycloud/klipse
     volumes:
-      - nas_volume:/mnt/mycloud/klipse
+      - /mnt/mycloud/klipse:/mnt/mycloud/klipse
       - ./out:/app/out
     depends_on:
       - redis
@@ -28,7 +28,6 @@ services:
 
 volumes:
   redis_data:
-  nas_volume:
 
 networks:
   upload-network:
