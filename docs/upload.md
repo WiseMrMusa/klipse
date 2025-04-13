@@ -22,3 +22,9 @@ The upload service is responsible for uploading the files to the storage (s3/NAS
 
 - Use Docker for local development
 - Use Docker Compose for local development
+
+
+## Ideas
+
+- Allow user to upload file via API
+- Allow user to choose where to upload (s3/NAS/r2/local)
