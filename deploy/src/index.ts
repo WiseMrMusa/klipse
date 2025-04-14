@@ -40,13 +40,14 @@ process.on('SIGINT', async () => {
 });
 
 // NAS Path Configuration
-const NAS_INPUT_PATH = '/nas/input';
-const NAS_OUTPUT_PATH = '/nas/deployments';
+const NAS_INPUT_PATH = '/mnt/mycloud/klipse/out';
+const NAS_OUTPUT_PATH = '/mnt/mycloud/klipse/deployments';
 
 // Download from NAS
 async function downloadFromNas(projectId: string) {
   console.log(`[${projectId}] Starting download from NAS...`);
   const source = join(NAS_INPUT_PATH, projectId);
+  console.log(`[${projectId}] Source path: ${source}`);
   const dest = join('/tmp', projectId);
   
   await ensureDir(dest);
