@@ -17,9 +17,9 @@ services:
       - "3005:3005"
     environment:
       - REDIS_URL=redis://redis:6379
-      - NAS_PATH=/mnt/mycloud/klipse
+      - NAS_PATH=/nas/klipse
     volumes:
-      - /mnt/mycloud/klipse:/mnt/mycloud/klipse
+      - nas_volume:/nas/klipse
       - ./out:/app/out
     depends_on:
       - redis
@@ -34,8 +34,8 @@ services:
       - REDIS_URL=redis://redis:6379
     volumes:
       - ./:/app
-      - /mnt/mycloud/klipse/:/nas/input
-      - /mnt/mycloud/klipse/deploy/:/nas/deployments
+      - nas_volume:/nas/klipse
+      - nas_volume:/nas/deployments
     depends_on:
       - redis
     networks:
@@ -43,6 +43,12 @@ services:
 
 volumes:
   redis_data:
+  nas_volume:
+    driver: local
+    driver_opts:
+      type: none
+      device: /mnt/mycloud/klipse
+      o: bind
 
 networks:
   upload-network:
