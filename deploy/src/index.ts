@@ -75,7 +75,21 @@ async function processJobs() {
       const job = await redisClient.brPop('deploy-queue', 0);
       
       if (job) {
-        const { projectId } = JSON.parse(job.element);
+        let projectId: string;
+        try {
+          const jobData = JSON.parse(job.element);
+          if (!jobData.projectId || typeof jobData.projectId !== 'string') {
+            throw new Error('Invalid job data: projectId is missing or invalid');
+          }
+          projectId = jobData.projectId;
+        } catch (parseError) {
+          console.error('Failed to parse job data:', {
+            error: parseError instanceof Error ? parseError.message : 'Unknown error',
+            rawData: job.element
+          });
+          continue; // Skip this job and continue processing
+        }
+
         console.log(`[${projectId}] Processing new deployment job`);
 
         try {
