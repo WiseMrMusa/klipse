@@ -121,7 +121,7 @@ async function processJobs() {
           console.log(`[${projectId}] Build completed successfully`);
 
           // 3. Upload build output to NAS
-          await uploadToNas(projectId, join(localPath, '.next'));
+          await uploadToNas(projectId, join(localPath, buildDir));
 
           // 4. Update status
           await redisClient.hSet('deploy-status', projectId, 'deployed');
