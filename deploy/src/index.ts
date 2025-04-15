@@ -113,9 +113,9 @@ async function processJobs() {
           // 2. Build project with timeout
           console.log(`[${projectId}] Starting build process using ${installCmd}...`);
           execSync(`${installCmd} && ${buildCmd}`, {
-            cwd: join(localPath, buildDir),
+            cwd: localPath,
             stdio: 'inherit',
-            shell: '/bin/bash',
+            // shell: '/usr/bin/bash',
             timeout: 300000 // 5 minutes timeout
           });
           console.log(`[${projectId}] Build completed successfully`);

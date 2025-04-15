@@ -48,7 +48,7 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: ~/Desktop/projects/klipse
+      device: /home/superman/Desktop/projects/klipse
       o: bind
 
 networks:
