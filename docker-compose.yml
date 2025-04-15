@@ -2,6 +2,21 @@ version: '3.8'
 name: klipse
 
 services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:3005
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    networks:
+      - upload-network
+    depends_on:
+      - upload
+
   redis:
     image: redis:alpine
     ports:
