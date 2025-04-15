@@ -1,24 +1,24 @@
 FROM node:18-alpine
 
+# Install pnpm
+RUN corepack enable && corepack prepare pnpm@latest --activate
+
 WORKDIR /app
 
-# Install dependencies
-COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
-RUN \
-  if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
-  elif [ -f package-lock.json ]; then npm ci; \
-  elif [ -f pnpm-lock.yaml ]; then yarn global add pnpm && pnpm i; \
-  else npm i; \
-  fi
+# Copy package.json and pnpm-lock.yaml
+COPY package.json pnpm-lock.yaml ./
 
-# Copy application code
+# Install dependencies
+RUN pnpm install --frozen-lockfile
+
+# Copy the rest of the application
 COPY . .
 
 # Build the application
-RUN npm run build
+RUN pnpm build
 
 # Expose the port the app runs on
 EXPOSE 3000
 
 # Start the application
-CMD ["npm", "run", "start"]
+CMD ["pnpm", "start"]

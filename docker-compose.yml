@@ -11,8 +11,11 @@ services:
     volumes:
       - ./frontend:/app
       - /app/node_modules
+      - /app/.next
     networks:
       - upload-network
+    depends_on:
+      - upload
 
   redis:
     image: redis:alpine
@@ -60,7 +63,7 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /mnt/mycloud/klipse
+      device: ${NAS_MOUNT_PATH:-/mnt/mycloud/klipse}
       o: bind
 
 networks:
