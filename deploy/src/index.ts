@@ -95,20 +95,33 @@ async function processJobs() {
         console.log(`[${projectId}] Processing new deployment job`);
 
         try {
+          // Fetch build details from Redis
+          // const buildDetailsJson = await redisClient.get(`buildDetails:${projectId}`);
+          const jobData = JSON.parse(job.element);
+          const buildDetailsconfig = jobData
+          if (!buildDetailsconfig) {
+            throw new Error('Build details not found in Redis');
+          }
+          // const buildDetails = JSON.parse(buildDetailsconfig);
+          const { buildCmd, buildDir, installCmd } = buildDetailsconfig;
+
+          console.log("config=====", buildCmd, buildDir, installCmd)
+
           // 1. Download from NAS
           const localPath = await downloadFromNas(projectId);
           
           // 2. Build project with timeout
-          console.log(`[${projectId}] Starting build process...`);
-          execSync('npm install && npm run build', {
+          console.log(`[${projectId}] Starting build process using ${installCmd}...`);
+          execSync(`${installCmd} && ${buildCmd}`, {
             cwd: localPath,
             stdio: 'inherit',
+            // shell: '/usr/bin/bash',
             timeout: 300000 // 5 minutes timeout
           });
           console.log(`[${projectId}] Build completed successfully`);
 
           // 3. Upload build output to NAS
-          await uploadToNas(projectId, join(localPath, '.next'));
+          await uploadToNas(projectId, join(localPath, buildDir));
 
           // 4. Update status
           await redisClient.hSet('deploy-status', projectId, 'deployed');
