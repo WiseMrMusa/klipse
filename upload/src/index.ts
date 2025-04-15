@@ -16,6 +16,9 @@ const NAS_PATH = process.env.NAS_PATH || '/mnt/mycloud/klipse'; // Change to you
 // Endpoint to handle repo processing
 app.post('/process', async (req, res) => {
   const repoUrl = req.body.repoUrl;
+  const buildCmd = req.body.buildCmd;
+  const buildDir = req.body.buildDir;
+  const installCmd = req.body.installCmd;
   const uploadId = uuidv4();
   
   try {
@@ -32,7 +35,9 @@ app.post('/process', async (req, res) => {
     await fs.remove(`./out/${uploadId}`);
 
     // Update Redis
+    const buildDetails = JSON.stringify({ buildCmd, buildDir, installCmd });
     await publisher.publish('upload-queue', uploadId);
+    await publisher.set(`buildDetails:${uploadId}`, buildDetails);
     await publisher.set(`status:${uploadId}`, 'uploaded');
     
     res.json({ uploadId });
