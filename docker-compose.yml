@@ -63,7 +63,7 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: ${NAS_MOUNT_PATH:-/mnt/mycloud/klipse}
+      device: /home/superman/Desktop/projects/klipse
       o: bind
 
 networks:
