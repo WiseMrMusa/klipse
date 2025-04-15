@@ -1,6 +1,7 @@
 # Build stage
 FROM node:18 AS builder
 
+
 WORKDIR /upload-app
 COPY package*.json ./
 COPY tsconfig.json ./
