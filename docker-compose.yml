@@ -35,7 +35,8 @@ services:
     volumes:
       - ./:/app
       - nas_volume:/nas/klipse
-      - nas_volume:/nas/deployments
+      - nas_volume:/nas/deploy
+      - nas_volume:/temp
     depends_on:
       - redis
     networks:

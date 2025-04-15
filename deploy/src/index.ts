@@ -40,15 +40,16 @@ process.on('SIGINT', async () => {
 });
 
 // NAS Path Configuration
-const NAS_INPUT_PATH = '/mnt/mycloud/klipse/out';
-const NAS_OUTPUT_PATH = '/mnt/mycloud/klipse/deployments';
+const NAS_INPUT_PATH = '/nas/klipse/out/';
+const NAS_OUTPUT_PATH = '/nas/klipse/deploy';
+const NAS_TEMP_PATH = '/nas/klipse/temp/'
 
 // Download from NAS
 async function downloadFromNas(projectId: string) {
   console.log(`[${projectId}] Starting download from NAS...`);
   const source = join(NAS_INPUT_PATH, projectId);
   console.log(`[${projectId}] Source path: ${source}`);
-  const dest = join('/tmp', projectId);
+  const dest = join(NAS_TEMP_PATH, projectId);
   
   await ensureDir(dest);
   await copy(source, dest);
@@ -107,7 +108,7 @@ async function processJobs() {
           console.log(`[${projectId}] Build completed successfully`);
 
           // 3. Upload build output to NAS
-          await uploadToNas(projectId, join(localPath, 'build'));
+          await uploadToNas(projectId, join(localPath, '.next'));
 
           // 4. Update status
           await redisClient.hSet('deploy-status', projectId, 'deployed');
@@ -119,7 +120,7 @@ async function processJobs() {
           await redisClient.hSet('deploy-status', projectId, `error: ${errorMessage}`);
         } finally {
           console.log(`[${projectId}] Cleaning up temporary files...`);
-          await remove(join('/tmp', projectId));
+          await remove(join(NAS_TEMP_PATH, projectId));
           console.log(`[${projectId}] Cleanup completed`);
         }
       }
