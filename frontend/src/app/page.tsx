@@ -20,11 +20,11 @@ export default function Home() {
       }
 
       // TODO: Add your backend API call here
-      const response = await fetch('http://localhost:3005/process', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ repoUrl })
-      });
+      // const response = await fetch('http://localhost:3005/process', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({ repoUrl })
+      // });
 
       setSuccess("Repository submitted successfully! Deployment in progress...");
       setRepoUrl("");
