@@ -57,6 +57,18 @@ services:
     networks:
       - upload-network
 
+    webserver:
+      build: ./webserver
+      ports:
+        - "8000:8000"
+      volumes:
+        - nas_volume:/deployed_apps
+      depends_on:
+        - deploy
+      networks:
+        - upload-network
+
+
 volumes:
   redis_data:
   nas_volume:
