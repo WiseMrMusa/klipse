@@ -63,7 +63,7 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: ${NAS_MOUNT_PATH:-/mnt/mycloud/klipse}
+      device: /mnt/mycloud/klipse
       o: bind
 
 networks:

@@ -35,12 +35,14 @@ app.post('/process', async (req, res) => {
     await fs.remove(`./out/${uploadId}`);
 
     // Update Redis
+
     await publisher.lPush('build-queue', JSON.stringify({
         projectId: uploadId,
         buildCmd,
         buildDir,
         installCmd
     }));
+
     await publisher.set(`status:${uploadId}`, 'uploaded');
     
     res.json({ uploadId });
