@@ -22,8 +22,8 @@ app.post('/process', async (req, res) => {
   const uploadId = uuidv4();
   
   try {
-    // Clone repo
-    await simpleGit().clone(repoUrl, `./out/${uploadId}`);
+    // Clone repo with depth=1 (shallow clone)
+    await simpleGit().clone(repoUrl, `./out/${uploadId}`, ['--depth', '1']);
     
     // Process files
     const files = await getAllFiles(`./out/${uploadId}`);
@@ -35,9 +35,14 @@ app.post('/process', async (req, res) => {
     await fs.remove(`./out/${uploadId}`);
 
     // Update Redis
-    const buildDetails = JSON.stringify({ buildCmd, buildDir, installCmd });
-    await publisher.publish('upload-queue', uploadId);
-    await publisher.set(`buildDetails:${uploadId}`, buildDetails);
+
+    await publisher.lPush('build-queue', JSON.stringify({
+        projectId: uploadId,
+        buildCmd,
+        buildDir,
+        installCmd
+    }));
+
     await publisher.set(`status:${uploadId}`, 'uploaded');
     
     res.json({ uploadId });

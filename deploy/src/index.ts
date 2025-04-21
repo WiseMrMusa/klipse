@@ -74,7 +74,7 @@ async function processJobs() {
 
     while (true) {
       console.log('Waiting for new deployment job...');
-      const job = await redisClient.brPop('deploy-queue', 0);
+      const job = await redisClient.brPop('build-queue', 0);
       
       if (job) {
         let projectId: string;
